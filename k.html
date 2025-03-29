@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mess Menu Formation System – Powered Up</title>
+  <!-- Google Fonts for Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS (v4.5.2) -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <style>
+    :root {
+      --dark-bg: #1c1d22;              /* Page background */
+      --wizard-bg: #ffffff;            /* Wizard background color */
+      --accent: #7289da;               /* Accent for buttons, progress */
+      --accent-hover: #e6e6e6;
+      --error-color: #f04747;          /* Bright red for errors */
+      --footer-bg: #23272a;            /* Footer background */
+      --footer-text: #ffffff;
+      --main-font: 'Poppins', sans-serif;
+      --nav-bg: #2c2f33;              /* Dark navigation background */
+    }
+
+    /* Global Resets and Base */
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--dark-bg);
+      transition: background 0.5s ease;
+      font-family: var(--main-font);
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Main content container */
+    .main-content {
+      flex: 1 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+    
+    /* Background Classes for Different Steps (unchanged) */
+    .bg-step1 { 
+      background: url('https://integrishealth.org/-/media/blog/18-april/bowls-of-superfood-fruits-and-vegetables.ashx?revision=745f638c-d9a3-4a85-8963-9436f6b71e19') no-repeat center center fixed; 
+      background-size: cover; 
+    }
+    .bg-step2 { 
+      background: url('https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg') no-repeat center center fixed; 
+      background-size: cover; 
+    }
+    .bg-step3 { 
+      background: url('https://nutrition.org/wp-content/uploads/2022/03/Healthy-food-selection.jpg') no-repeat center center fixed; 
+      background-size: cover; 
+    }
+    .bg-step4 { 
+      background: url('https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg') no-repeat center center fixed; 
+      background-size: cover; 
+      filter: grayscale(50%); 
+    }
+    
+    /* Updated Top Navigation Menu Styling with Dark Theme */
+    .menu {
+      background: var(--nav-bg);
+      padding: 10px 0;
+      margin-bottom: 20px;
+      list-style: none;
+      font-family: "Varela Round", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .menu li {
+      width: 125px;
+      height: 50px;
+      text-align: center;
+      transition: background-position-x 0.9s linear;
+    }
+    .menu li a {
+      font-size: 22px;
+      color: #ffffff;
+      text-decoration: none;
+      display: block;
+      line-height: 50px;
+      transition: all 0.45s;
+    }
+    .menu li:hover {
+      background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjM5MHB4IiBoZWlnaHQ9IjUwcHgiIGVuYWJlLWJhY2tnPSJuZXcgMCAwIDM5MCA1MCIgeG1sOndzcGFjZT0icHJlc2VydmUiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2NjYyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgZD0iTTAsNDcuNTg1YzAsMCw5Ny41LDAsMTMwLDBjMTMuNzUsMCwyOC43NC0zOC43NzgsNDYuMTY4LTE5LjQxNkMxOTIuNjY5LDQ2LjUsMjQzLjYwMyw0Ny42MDUsNDcuNTg1LDI2MCw0Ny41ODVjMzEuODIxLDAsMTMwLDAsMTMwLDAiLz4KPC9zdmc+Cg==");
+      animation: line 1s;
+    }
+    .menu li:hover a { 
+      color: var(--accent); 
+    }
+    .menu li:not(:last-child) {
+      margin-right: 30px;
+    }
+    @keyframes line {
+      0% { background-position-x: 390px; }
+    }
+    
+    /* Wizard Form Styling with updated dimensions and color */
+    .wizard {
+      background: var(--wizard-bg);
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+      padding: 40px;
+      margin: 30px auto;
+      max-width: 1000px;       /* Increased width */
+      min-height: 700px;       /* Increased height */
+      font-family: var(--main-font);
+      opacity: 0;
+      animation: fadeIn 0.6s forwards;
+    }
+    .wizard h2 { 
+      margin-bottom: 20px; 
+      color: var(--accent); 
+    }
+    .step { display: none; }
+    .step.active { 
+      display: block; 
+      animation: fadeIn 0.6s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .btn-custom {
+      background-color: var(--accent);
+      color: #fff;
+      border: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .btn-custom:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+    .progress {
+      height: 8px;
+      background-color: #444;
+      border-radius: 4px;
+      margin-bottom: 30px;
+    }
+    .progress-bar {
+      background-color: var(--accent);
+      transition: width 0.4s ease;
+    }
+    .error {
+      border-color: var(--error-color);
+    }
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    
+    /* Footer Styling */
+    footer {
+      flex-shrink: 0;
+      background-color: var(--footer-bg);
+      color: var(--footer-text);
+      padding: 15px 0;
+    }
+    footer a {
+      color: var(--footer-text);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    footer a:hover { color: #ffe0e0; }
+    footer .footer-links {
+      list-style: none;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+    footer .footer-links li {
+      display: inline-block;
+      margin: 0 15px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation Menu -->
+  <nav>
+    <ul class="menu">
+      <li><a href="mess.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="aboutme.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="#services"><i class="fas fa-concierge-bell"></i> Services</a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main content container -->
+  <div class="main-content">
+    <div class="wizard">
+      <div class="progress">
+        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 25%;"></div>
+      </div>
+      <form id="messForm" novalidate>
+        <!-- Step 1: Student & Mess Details -->
+        <div class="step active" id="step-1">
+          <h2><i class="fas fa-user-graduate"></i> Student & Mess Details</h2>
+          <div class="form-group">
+            <label for="regNo">Registration Number</label>
+            <input type="text" class="form-control" id="regNo" name="regNo" placeholder="Enter Reg No" required aria-label="Registration Number" maxlength="30" pattern="[a-zA-Z]+">
+            <div class="error-message" id="error-regNo"></div>
+          </div>
+          <div class="form-group">
+            <label for="studentName">Student Name</label>
+            <input type="text" class="form-control" id="studentName" name="studentName" placeholder="Enter Name" required aria-label="Student Name">
+            <div class="error-message" id="error-studentName"></div>
+          </div>
+          <div class="form-group">
+            <label for="blockRoom">Block & Room Number</label>
+            <input type="text" class="form-control" id="blockRoom" name="blockRoom" placeholder="Ex: Block A, Room 101" required aria-label="Block and Room Number">
+            <div class="error-message" id="error-blockRoom"></div>
+          </div>
+          <div class="form-group">
+            <label for="diningMess">Name of Dining Mess</label>
+            <input type="text" class="form-control" id="diningMess" name="diningMess" placeholder="Enter Mess Name" required aria-label="Dining Mess Name">
+            <div class="error-message" id="error-diningMess"></div>
+          </div>
+          <div class="form-group">
+            <label for="messType">Type of Mess</label>
+            <select class="form-control" id="messType" name="messType" required aria-label="Type of Mess">
+              <option value="">-- Select --</option>
+              <option value="Veg">Veg</option>
+              <option value="Non-Veg">Non-Veg</option>
+              <option value="Special">Special</option>
+              <option value="Night Mess">Night Mess</option>
+            </select>
+            <div class="error-message" id="error-messType"></div>
+          </div>
+          <button type="button" class="btn btn-custom float-right" onclick="nextStep()">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <!-- Step 2: Menu Details -->
+        <div class="step" id="step-2" style="width: 550px">
+          <h2><i class="fas fa-utensils"></i> Menu Details</h2>
+          <div class="form-group">
+            <label for="foodSuggestion">Food Item Suggestion</label>
+            <textarea class="form-control" id="foodSuggestion" name="foodSuggestion" rows="3" placeholder="Enter your suggestion" required aria-label="Food Item Suggestion"></textarea>
+            <div class="error-message" id="error-foodSuggestion"></div>
+          </div>
+          <div class="form-group">
+            <label for="mealType">Type of Meal</label>
+            <select class="form-control" id="mealType" name="mealType" required aria-label="Type of Meal">
+              <option value="">-- Select --</option>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Dinner">Dinner</option>
+              <option value="Night Mess">Night Mess</option>
+            </select>
+            <div class="error-message" id="error-mealType"></div>
+          </div>
+          <div class="form-group">
+            <label>Feasibility for Mass Production</label>
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="feasibility" id="feasibleYes" value="Yes" required>
+                <label class="form-check-label" for="feasibleYes">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="feasibility" id="feasibleNo" value="No">
+                <label class="form-check-label" for="feasibleNo">No</label>
+              </div>
+            </div>
+            <div class="error-message" id="error-feasibility"></div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-custom" onclick="nextStep()">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+        
+        <!-- Step 3: Additional Comments -->
+        <div class="step" id="step-3">
+          <h2><i class="fas fa-comments"></i> Additional Comments</h2>
+          <div class="form-group">
+            <label for="comments">Comments or Special Requests</label>
+            <textarea class="form-control" id="comments" name="comments" rows="4" placeholder="Enter any additional comments" required aria-label="Additional Comments"></textarea>
+            <div class="error-message" id="error-comments"></div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-custom" onclick="nextStep()">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+        
+        <!-- Step 4: Report Options & Review -->
+        <div class="step" id="step-4">
+          <h2><i class="fas fa-chart-bar"></i> Report Options & Review</h2>
+          <p>Select report type(s) to generate:</p>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="reportStudent" name="reportOptions" value="student">
+            <label class="form-check-label" for="reportStudent">Student-wise Report</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="reportMonthly" name="reportOptions" value="monthly">
+            <label class="form-check-label" for="reportMonthly">Monthly Report</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="reportWeekly" name="reportOptions" value="weekly">
+            <label class="form-check-label" for="reportWeekly">Weekly Report</label>
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="reportMeal" name="reportOptions" value="meal">
+            <label class="form-check-label" for="reportMeal">Meal-wise Report</label>
+          </div>
+          <p>Export Options:</p>
+          <div class="mb-4">
+            <button type="button" class="btn btn-success" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Export to Excel</button>
+            <button type="button" class="btn btn-danger" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-custom" onclick="reviewForm()">Review & Submit <i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="Privacy.html">Privacy</a></li> 
+        <li><a href="Terms.html">Terms</a></li>
+        <li><a href="Support.html">Support</a></li>
+        <li><a href="Feedback.html">Feedback</a></li>
+      </ul>
+    </div>
+  </footer>
+  
+  <!-- Modal for Final Review -->
+  <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Review Your Submission</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="reviewContent"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Edit</button>
+          <button type="button" class="btn btn-custom" onclick="finalSubmit()">Confirm & Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- (Optional) Libraries for Excel/PDF export can be added here -->
+  <script>
+    let currentStep = 1;
+    const totalSteps = 4;
+    
+    // Update body background for current step
+    function updateBackground(step) {
+      document.body.className = "";
+      if (step === 1) { document.body.classList.add("bg-step1"); }
+      else if (step === 2) { document.body.classList.add("bg-step2"); }
+      else if (step === 3) { document.body.classList.add("bg-step3"); }
+      else if (step === 4) { document.body.classList.add("bg-step4"); }
+    }
+    
+    // Load saved form data from localStorage and update inputs
+    $(document).ready(function(){
+      const savedData = localStorage.getItem("messFormData");
+      if(savedData){
+        const formData = JSON.parse(savedData);
+        for(const key in formData){
+          let field = $('[name="'+key+'"]');
+          field.val(formData[key]);
+          if(key === 'feasibility'){
+            $('[name="feasibility"][value="'+formData[key]+'"]').prop('checked', true);
+          }
+        }
+      }
+      updateBackground(currentStep);
+      showStep(currentStep);
+    });
+    
+    function showStep(step) {
+      $('.step').removeClass('active');
+      $('#step-' + step).addClass('active');
+      const progressPercent = (step / totalSteps) * 100;
+      $('#progressBar').css('width', progressPercent + '%');
+      updateBackground(step);
+      saveFormData();
+    }
+    
+    // Validate required fields in the current step and show inline error messages
+    function validateStep(step) {
+      let valid = true;
+      $('#step-' + step + ' [required]').each(function(){
+        if(!$(this).val() || ($(this).attr('type') === 'radio' && !$('[name="'+$(this).attr('name')+'"]:checked').length)){
+          $(this).addClass('error');
+          const errorContainer = $('#error-' + $(this).attr('id'));
+          if(errorContainer.length){
+            errorContainer.text("This field is required.");
+          }
+          valid = false;
+        } else {
+          $(this).removeClass('error');
+          $('#error-' + $(this).attr('id')).text("");
+        }
+      });
+      if(!valid){
+        $('html, body').animate({
+          scrollTop: $('.error').first().offset().top - 20
+        }, 500);
+      }
+      return valid;
+    }
+    
+    function nextStep() {
+      if(validateStep(currentStep)){
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+    
+    function prevStep() {
+      currentStep--;
+      showStep(currentStep);
+    }
+    
+    function saveFormData(){
+      const formData = $('#messForm').serializeArray();
+      let dataObj = {};
+      formData.forEach(item => dataObj[item.name] = item.value);
+      localStorage.setItem("messFormData", JSON.stringify(dataObj));
+    }
+    
+    function reviewForm(){
+      if(validateStep(currentStep)){
+        const formData = $('#messForm').serializeArray();
+        let reviewHTML = "<ul class='list-group'>";
+        formData.forEach(item => {
+          reviewHTML += "<li class='list-group-item'><strong>" + item.name + ":</strong> " + item.value + "</li>";
+        });
+        reviewHTML += "</ul>";
+        $("#reviewContent").html(reviewHTML);
+        $("#reviewModal").modal('show');
+      }
+    }
+    
+    function finalSubmit(){
+      $("#reviewModal").modal('hide');
+      localStorage.removeItem("messFormData");
+      alert("Form submitted successfully!");
+      $("#messForm")[0].reset();
+      currentStep = 1;
+      showStep(currentStep);
+    }
+    
+    function exportExcel(){
+      alert("Export to Excel functionality coming soon!");
+    }
+    
+    function exportPDF(){
+      alert("Export to PDF functionality coming soon!");
+    }
+    
+    // Autosave form data every 10 seconds
+    setInterval(saveFormData, 10000);
+    
+    // Warn user if leaving with unsaved changes
+    window.onbeforeunload = function() {
+      return "You have unsaved changes. Are you sure you want to leave?";
+    };
+  </script>
+</body>
+</html>
